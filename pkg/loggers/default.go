@@ -2,6 +2,7 @@ package loggers
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -20,33 +21,33 @@ func (l *Default) prefix(p string, s string) string {
 }
 
 func (l *Default) Infof(format string, args ...any) {
-	fmt.Printf(l.prefix(" [INFO] ", " ")+format+"\n", args...)
+	fmt.Printf(l.prefix(" [INFO] ", " ")+strings.Trim(format, " \n")+"\n", args...)
 }
 
 func (l *Default) Errorf(format string, args ...any) {
-	fmt.Printf(l.prefix("[ERROR] ", " ")+format+"\n", args...)
+	fmt.Printf(l.prefix("[ERROR] ", " ")+strings.Trim(format, " \n")+"\n", args...)
 }
 
 func (l *Default) Debugf(format string, args ...any) {
-	fmt.Printf(l.prefix("[DEBUG] ", " ")+format+"\n", args...)
+	fmt.Printf(l.prefix("[DEBUG] ", " ")+strings.Trim(format, " \n")+"\n", args...)
 }
 
 func (l *Default) Warnf(format string, args ...any) {
-	fmt.Printf(l.prefix(" [WARN] ", " ")+format+"\n", args...)
+	fmt.Printf(l.prefix(" [WARN] ", " ")+strings.Trim(format, " \n")+"\n", args...)
 }
 
 func (l *Default) Info(args ...any) {
-	fmt.Println(l.prefix(" [INFO] ", " "), fmt.Sprint(args...))
+	fmt.Println(l.prefix(" [INFO] ", ""), strings.Trim(fmt.Sprint(args...), " \r\n"))
 }
 
 func (l *Default) Error(args ...any) {
-	fmt.Println(l.prefix("[ERROR] ", " "), fmt.Sprint(args...))
+	fmt.Println(l.prefix("[ERROR] ", ""), strings.Trim(fmt.Sprint(args...), " \r\n"))
 }
 
 func (l *Default) Debug(args ...any) {
-	fmt.Println(l.prefix("[DEBUG] ", " "), fmt.Sprint(args...))
+	fmt.Println(l.prefix("[DEBUG] ", ""), strings.Trim(fmt.Sprint(args...), " \r\n"))
 }
 
 func (l *Default) Warn(args ...any) {
-	fmt.Println(l.prefix(" [WARN] ", " "), fmt.Sprint(args...))
+	fmt.Println(l.prefix(" [WARN] ", ""), strings.Trim(fmt.Sprint(args...), " \r\n"))
 }
