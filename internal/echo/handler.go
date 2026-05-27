@@ -4,28 +4,25 @@ import (
 	"strings"
 
 	"github.com/Emibotz/megu/pkg/loggers"
+	"github.com/Emibotz/megu/pkg/utils"
 	milky "github.com/Szzrain/Milky-go-sdk"
 )
 
+// 回声命令处理器
 func Handler(session *milky.Session, event *milky.ReceiveMessage) {
 	logger := loggers.NewDefault("Echo")
 
-	// 必须是群聊或私聊消息
-	if event.MessageScene != "group" && event.MessageScene != "friend" {
-		return
-	}
-
 	// 消息必须是纯文本
-	if len(event.Segments) != 1 || event.Segments[0].Type() != "text" {
+	if len(event.Segments) != 1 || event.Segments[0].Type() != milky.Text {
 		return
 	}
 
-	textMsg, ok := event.Segments[0].(*milky.TextElement)
+	textSeg, ok := event.Segments[0].(*milky.TextElement)
 	if !ok {
 		return
 	}
 
-	text := textMsg.Text
+	text := textSeg.Text
 
 	// 检测消息前缀
 	if strings.HasPrefix(text, ".echo") {
@@ -41,25 +38,9 @@ func Handler(session *milky.Session, event *milky.ReceiveMessage) {
 		// 构建并发送消息
 		logger.Infof("Echo: %s", str)
 
-		reply := []milky.IMessageElement{
-			&milky.TextElement{
-				Text: str,
-			},
-		}
-
-		switch event.MessageScene {
-		case "group":
-			_, err := session.SendGroupMessage(event.PeerId, &reply)
-			if err != nil {
-				logger.Errorf("Failed to send group message: %v", err)
-				return
-			}
-		case "friend":
-			_, err := session.SendPrivateMessage(event.PeerId, &reply)
-			if err != nil {
-				logger.Errorf("Failed tot send group message: %v", err)
-				return
-			}
+		_, err := utils.SendTextMessage(session, event.MessageScene, event.PeerId, str)
+		if err != nil {
+			logger.Errorf("Failed to send message: %v", err)
 		}
 	}
 }
