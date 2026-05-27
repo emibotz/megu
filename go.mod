@@ -4,6 +4,7 @@ go 1.26.3
 
 require (
 	github.com/Szzrain/Milky-go-sdk v1.0.2
+	github.com/go-andiamo/splitter v1.2.5
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.9.2
 	github.com/joho/godotenv v1.5.1
